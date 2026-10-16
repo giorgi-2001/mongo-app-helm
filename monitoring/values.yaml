@@ -55,6 +55,17 @@ opentelemetry-collector:
 
 kube-prometheus-stack:
   enabled: true
+  grafana:
+    ingress:
+      enabled: true
+      ingressClassName: traefik
+      hosts:
+        - localhost
+      path: /monitoring/grafana
+    grafana.ini:
+      server:
+        root_url: "%(protocol)s://%(domain)s/monitoring/grafana/"
+        serve_from_sub_path: true
   prometheus:
     prometheusSpec:
       additionalScrapeConfigs:

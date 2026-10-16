@@ -39,6 +39,6 @@ Deploy with Argo CD:
 kubectl apply -k argocd
 ```
 
-This applies the Argo CD `Application` resources for the app and monitoring charts. Argo CD must already be installed in the cluster; these manifests do not install Argo CD itself.
+This applies the Argo CD `Application` resources for Traefik, the app, and monitoring. Argo CD must already be installed in the cluster; these manifests do not install Argo CD itself.
 
 The Argo CD applications also install Traefik as the Ingress controller. The Traefik chart is pinned to version `42.0.0`, which requires Kubernetes `1.30` or newer. The UI Ingress uses the `traefik` IngressClass. Traefik's `LoadBalancer` Service requires a cluster or cloud provider that supports external load balancers.

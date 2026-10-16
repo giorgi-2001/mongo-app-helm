@@ -27,9 +27,9 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "mongo-app-ui.fullname" $ }}
+                name: {{ dig "backend" "service" "name" (include "mongo-app-ui.fullname" $) . }}
                 port:
-                  number: {{ $.Values.service.port }}
+                  number: {{ dig "backend" "service" "port" "number" $.Values.service.port . }}
           {{- end }}
     {{- end }}
 {{- end }}

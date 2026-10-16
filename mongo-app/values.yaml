@@ -24,14 +24,6 @@ mongo-app-ui:
                 name: mongo-app-ui
                 port:
                   number: 80
-
-          - path: /monitoring/grafana
-            pathType: Prefix
-            backend:
-              service:
-                name: monitoring-grafana
-                port:
-                  number: 80
     tls: []
   httpRoute:
     enabled: false
