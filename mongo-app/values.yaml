@@ -11,8 +11,8 @@ mongo-app-ui:
     port: 80
     containerPort: 80
   ingress:
-    enabled: false
-    className: nginx
+    enabled: true
+    className: traefik
     annotations: {}
     hosts:
       - host: ""
@@ -22,6 +22,14 @@ mongo-app-ui:
             backend:
               service:
                 name: mongo-app-ui
+                port:
+                  number: 80
+
+          - path: /monitoring/grafana
+            pathType: Prefix
+            backend:
+              service:
+                name: monitoring-grafana
                 port:
                   number: 80
     tls: []

@@ -22,7 +22,7 @@ service:
   containerPort: 80
 ingress:
   enabled: true
-  className: nginx
+  className: traefik
   annotations: {}
   hosts:
     - host: ""
