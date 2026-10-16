@@ -1,0 +1,83 @@
+mongo-app-ui:
+  fullnameOverride: mongo-app-ui
+  replicaCount: 1
+  image:
+    repository: giorgi023/mongo-app-ui
+    tag: ec824e92f4e5115414a9ce9f20953ffa1c730890
+    pullPolicy: IfNotPresent
+  env: []
+  service:
+    type: ClusterIP
+    port: 80
+    containerPort: 80
+  ingress:
+    enabled: true
+    className: nginx
+    annotations: {}
+    hosts:
+      - host: ""
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mongo-app-ui
+                port:
+                  number: 80
+    tls: []
+  httpRoute:
+    enabled: false
+    annotations: {}
+    parentRefs:
+      - name: gateway
+        sectionName: http
+    hostnames: []
+    rules:
+      - matches:
+          - path:
+              type: PathPrefix
+              value: /
+  resources: {}
+  livenessProbe:
+    httpGet:
+      path: /
+      port: http
+  readinessProbe:
+    httpGet:
+      path: /
+      port: http
+
+mongo-app:
+  fullnameOverride: mongo-app
+  replicaCount: 1
+  image:
+    repository: giorgi023/mongo-app
+    tag: 509deb9415f87fa7da2daf0baad18093cd90ea50
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8000
+    containerPort: 8000
+  env:
+    - name: MONGO_URI
+      value: "mongodb://appuser:AppPassword123@mongo-app-mongodb:27017/mydatabase?authSource=mydatabase"
+    - name: DB_NAME
+      value: "mydatabase"
+    - name: OTEL_ENDPOINT
+      value: "http://otel-collector.monitoring.svc.cluster.local:4317"
+
+  resources: {}
+  livenessProbe: {}
+  readinessProbe: {}
+
+mongodb:
+  enabled: true
+  auth:
+    rootPassword: "SecretRootPassword123"
+    username: "appuser"
+    password: "AppPassword123"
+    database: "mydatabase"
+  architecture: "standalone"
+  persistence:
+    enabled: true
+    size: 8Gi

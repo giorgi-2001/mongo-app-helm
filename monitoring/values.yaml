@@ -1,0 +1,96 @@
+opentelemetry-collector:
+  enabled: true
+  fullnameOverride: otel-collector
+  image:
+    repository: "otel/opentelemetry-collector-contrib"
+  mode: deployment
+  ports:
+    prometheus:
+      enabled: true
+      containerPort: 8889
+      servicePort: 8889
+      protocol: TCP
+  config:
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+
+    processors:
+      batch: {}
+
+    exporters:
+      debug:
+        verbosity: detailed
+
+      otlphttp/loki:
+        endpoint: http://loki:3100/otlp
+
+      otlphttp/jaeger:
+        endpoint: http://jaeger:4318
+
+      prometheus:
+        endpoint: 0.0.0.0:8889
+
+    service:
+      pipelines:
+        logs:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [debug, otlphttp/loki]
+
+        traces:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [debug, otlphttp/jaeger]
+
+        metrics:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [debug, prometheus]
+
+
+kube-prometheus-stack:
+  enabled: true
+  prometheus:
+    prometheusSpec:
+      additionalScrapeConfigs:
+        - job_name: otel-collector
+          static_configs:
+            - targets:
+                - otel-collector:8889
+
+  prometheus-node-exporter:
+    hostRootfs: false
+    hostRootFsMount:
+      enabled: false
+    extraArgs:
+      - --path.rootfs=/host
+    persistence:
+      enabled: false
+
+
+loki:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: grafana/loki
+    pullPolicy: IfNotPresent
+    tag: main-b13a0ab
+
+  fullnameOverride: loki
+  podAnnotations: {}
+  podLabels: {}
+
+  autoscaling:
+    enabled: false
+
+  serviceAccount:
+    create: false
+
+  service:
+    type: ClusterIP
+    port: 3100

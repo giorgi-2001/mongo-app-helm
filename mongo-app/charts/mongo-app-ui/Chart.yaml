@@ -1,0 +1,6 @@
+apiVersion: v2
+name: mongo-app-ui
+description: Frontend chart for the Mongo app
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
