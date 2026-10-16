@@ -33,3 +33,10 @@ helm uninstall mongo-app -n mongo
 
 kubectl delete ns mongo monitoring
 ```
+
+Deploy with Argo CD:
+```bash
+kubectl apply -k argocd -n argo-cd
+```
+
+This applies the Argo CD `Application` resources for the app and monitoring charts. Argo CD must already be installed in the cluster; these manifests do not install Argo CD itself.
