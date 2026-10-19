@@ -1,0 +1,6 @@
+cert-manager:
+  installCRDs: true
+
+clusterIssuer:
+  isLocal: true
+  acmeEmail: "user@example.com"

@@ -15,7 +15,7 @@ mongo-app-ui:
     className: traefik
     annotations: {}
     hosts:
-      - host: ""
+      - host: localhost
         paths:
           - path: /
             pathType: Prefix
@@ -24,7 +24,10 @@ mongo-app-ui:
                 name: mongo-app-ui
                 port:
                   number: 80
-    tls: []
+    tls:
+      - hosts:
+          - localhost
+        secretName: mongo-ui-tls-secret
   httpRoute:
     enabled: false
     annotations: {}

@@ -60,11 +60,15 @@ kube-prometheus-stack:
       enabled: true
       ingressClassName: traefik
       hosts:
-        - localhost
-      path: /monitoring/grafana
+        - monitoring.localhost
+      path: /
+      tls:
+        - hosts:
+            - monitoring.localhost
+          secretName: grafana-tls-secret
     grafana.ini:
       server:
-        root_url: "%(protocol)s://%(domain)s/monitoring/grafana/"
+        root_url: "%(protocol)s://%(domain)s/"
         serve_from_sub_path: true
   prometheus:
     prometheusSpec:

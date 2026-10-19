@@ -34,7 +34,9 @@ ingress:
               name: mongo-app-ui
               port:
                 number: 80
-  tls: []
+  tls:
+    - hosts: []
+      secretName: mongo-ui-tls-secret
 httpRoute:
   enabled: false
   annotations: {}
