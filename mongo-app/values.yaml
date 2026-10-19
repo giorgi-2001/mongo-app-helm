@@ -81,23 +81,9 @@ mongo-app:
 
 mongodb:
   enabled: true
-  auth:
-    rootPassword:
-      secretKeyRef:
-        name: mongo-app-secret
-        key: rootPassword
-    username:
-      secretKeyRef:
-        name: mongo-app-secret
-        key: username
-    password:
-      secretKeyRef:
-        name: mongo-app-secret
-        key: password
-    database:
-      secretKeyRef:
-        name: mongo-app-secret
-        key: database
+  existingSecret: "mongo-app-secret"
+  username: "appuser"
+  database: "mydatabase"
   architecture: "standalone"
   persistence:
     enabled: true
