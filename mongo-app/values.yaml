@@ -63,9 +63,15 @@ mongo-app:
     containerPort: 8000
   env:
     - name: MONGO_URI
-      value: "mongodb://appuser:AppPassword123@mongo-app-mongodb:27017/mydatabase?authSource=mydatabase"
+      value:
+        secretKeyRef:
+          name: mongo-app-secret
+          key: mongo_uri
     - name: DB_NAME
-      value: "mydatabase"
+      value:
+        secretKeyRef:
+          name: mongo-app-secret
+          key: database
     - name: OTEL_ENDPOINT
       value: "http://otel-collector.monitoring.svc.cluster.local:4317"
 
@@ -76,10 +82,22 @@ mongo-app:
 mongodb:
   enabled: true
   auth:
-    rootPassword: "SecretRootPassword123"
-    username: "appuser"
-    password: "AppPassword123"
-    database: "mydatabase"
+    rootPassword:
+      secretKeyRef:
+        name: mongo-app-secret
+        key: rootPassword
+    username:
+      secretKeyRef:
+        name: mongo-app-secret
+        key: username
+    password:
+      secretKeyRef:
+        name: mongo-app-secret
+        key: password
+    database:
+      secretKeyRef:
+        name: mongo-app-secret
+        key: database
   architecture: "standalone"
   persistence:
     enabled: true

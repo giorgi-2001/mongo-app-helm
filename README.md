@@ -13,29 +13,14 @@ monitoring containing subcharts:
 - kube-prometheus-stack
 - custom loki chart
 
-Set up:
-```bash
-#!/bin/bash
-
-helm dependency build monitoring
-helm dependency build mongo-app
-
-helm install monitoring ./monitoring -n monitoring --create-namespace
-helm install mongo-app ./mongo-app -n mongo --create-namespace
-```
-
-Clean up:
-```bash
-#!/bin/bash
-
-helm uninstall monitoring -n monitoring
-helm uninstall mongo-app -n mongo
-
-kubectl delete ns mongo monitoring
-```
 
 Deploy with Argo CD:
 ```bash
+helm repo add argo https://argoproj.github.io/argo-helm
+helm repo update
+
+helm upgrade --install argocd argo/argo-cd -n argocd --create-namespace
+
 kubectl apply -k argocd
 ```
 
