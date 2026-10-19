@@ -81,9 +81,11 @@ mongo-app:
 
 mongodb:
   enabled: true
-  existingSecret: "mongo-app-secret"
-  username: "appuser"
-  database: "mydatabase"
+  auth:
+    enabled: true
+    existingSecret: "mongo-app-secret"
+    username: "appuser"
+    database: "mydatabase"
   architecture: "standalone"
   persistence:
     enabled: true
