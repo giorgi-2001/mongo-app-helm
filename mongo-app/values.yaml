@@ -63,12 +63,12 @@ mongo-app:
     containerPort: 8000
   env:
     - name: MONGO_URI
-      value:
+      valueFrom:
         secretKeyRef:
           name: mongo-app-secret
           key: mongo_uri
     - name: DB_NAME
-      value:
+      valueFrom:
         secretKeyRef:
           name: mongo-app-secret
           key: database
