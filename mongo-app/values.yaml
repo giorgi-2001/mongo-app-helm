@@ -1,46 +1,67 @@
-mongo-app-ui:
-  fullnameOverride: mongo-app-ui
-  replicaCount: 1
+mongo-app:
+  env:
+  - name: MONGO_URI
+    valueFrom:
+      secretKeyRef:
+        key: mongo_uri
+        name: mongo-app-secret
+  - name: DB_NAME
+    valueFrom:
+      secretKeyRef:
+        key: database
+        name: mongo-app-secret
+  - name: OTEL_ENDPOINT
+    value: http://otel-collector.monitoring.svc.cluster.local:4317
+  fullnameOverride: mongo-app
   image:
-    repository: giorgi023/mongo-app-ui
-    tag: ec824e92f4e5115414a9ce9f20953ffa1c730890
     pullPolicy: IfNotPresent
-  env: []
-  service:
-    type: ClusterIP
-    port: 80
-    containerPort: 80
-  ingress:
-    enabled: true
-    className: traefik
-    annotations: {}
-    hosts:
-      - host: localhost
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: mongo-app-ui
-                port:
-                  number: 80
-    tls:
-      - hosts:
-          - localhost
-        secretName: mongo-ui-tls-secret
-  httpRoute:
-    enabled: false
-    annotations: {}
-    parentRefs:
-      - name: gateway
-        sectionName: http
-    hostnames: []
-    rules:
-      - matches:
-          - path:
-              type: PathPrefix
-              value: /
+    repository: giorgi023/mongo-app
+    tag: 124c7a77a91b8eeb6ad1134b3cb1b9ab03929a48
+  livenessProbe: {}
+  readinessProbe: {}
+  replicaCount: 1
   resources: {}
+  service:
+    containerPort: 8000
+    port: 8000
+    type: ClusterIP
+mongo-app-ui:
+  env: []
+  fullnameOverride: mongo-app-ui
+  httpRoute:
+    annotations: {}
+    enabled: false
+    hostnames: []
+    parentRefs:
+    - name: gateway
+      sectionName: http
+    rules:
+    - matches:
+      - path:
+          type: PathPrefix
+          value: /
+  image:
+    pullPolicy: IfNotPresent
+    repository: giorgi023/mongo-app-ui
+    tag: 124c7a77a91b8eeb6ad1134b3cb1b9ab03929a48
+  ingress:
+    annotations: {}
+    className: traefik
+    enabled: true
+    hosts:
+    - host: localhost
+      paths:
+      - backend:
+          service:
+            name: mongo-app-ui
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+    tls:
+    - hosts:
+      - localhost
+      secretName: mongo-ui-tls-secret
   livenessProbe:
     httpGet:
       path: /
@@ -49,44 +70,20 @@ mongo-app-ui:
     httpGet:
       path: /
       port: http
-
-mongo-app:
-  fullnameOverride: mongo-app
   replicaCount: 1
-  image:
-    repository: giorgi023/mongo-app
-    tag: 509deb9415f87fa7da2daf0baad18093cd90ea50
-    pullPolicy: IfNotPresent
-  service:
-    type: ClusterIP
-    port: 8000
-    containerPort: 8000
-  env:
-    - name: MONGO_URI
-      valueFrom:
-        secretKeyRef:
-          name: mongo-app-secret
-          key: mongo_uri
-    - name: DB_NAME
-      valueFrom:
-        secretKeyRef:
-          name: mongo-app-secret
-          key: database
-    - name: OTEL_ENDPOINT
-      value: "http://otel-collector.monitoring.svc.cluster.local:4317"
-
   resources: {}
-  livenessProbe: {}
-  readinessProbe: {}
-
+  service:
+    containerPort: 80
+    port: 80
+    type: ClusterIP
 mongodb:
-  enabled: true
+  architecture: standalone
   auth:
+    database: mydatabase
     enabled: true
-    existingSecret: "mongo-app-secret"
-    username: "appuser"
-    database: "mydatabase"
-  architecture: "standalone"
+    existingSecret: mongo-app-secret
+    username: appuser
+  enabled: true
   persistence:
     enabled: true
     size: 8Gi
