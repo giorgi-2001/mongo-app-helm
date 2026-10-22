@@ -57,7 +57,8 @@ mongo-app-ui:
     type: ClusterIP
   env: []
   ingress:
-    annotations: {}
+    annotations:
+      traefik.ingress.kubernetes.io/ssl-redirect: true
     className: traefik
     enabled: true
     hosts:

@@ -59,6 +59,8 @@ kube-prometheus-stack:
     adminPassword: "adminadmin"
     ingress:
       enabled: true
+      annotations:
+        traefik.ingress.kubernetes.io/ssl-redirect: true
       ingressClassName: traefik
       hosts:
         - monitoring.localhost
