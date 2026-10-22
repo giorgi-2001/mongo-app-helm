@@ -3,7 +3,7 @@ mongo-app:
   image:
     pullPolicy: IfNotPresent
     repository: giorgi023/mongo-app
-    tag: 042cdee0155aa81141a29850523f7dba7e8f5384
+    tag: a3cad2680e90f9977943474f03ae2b830fbb5593
   service:
     containerPort: 8000
     port: 8000
@@ -42,7 +42,7 @@ mongo-app-ui:
   image:
     pullPolicy: IfNotPresent
     repository: giorgi023/mongo-app-ui
-    tag: 042cdee0155aa81141a29850523f7dba7e8f5384
+    tag: a3cad2680e90f9977943474f03ae2b830fbb5593
   service:
     containerPort: 80
     port: 80
@@ -51,7 +51,7 @@ mongo-app-ui:
   ingress:
     annotations:
       traefik.ingress.kubernetes.io/router.middlewares: mongo-force-https@kubernetescrd
-      cert-manager.io/cluster-issuer: "global-issuer"
+      cert-manager.io/cluster-issuer: global-issuer
     className: traefik
     enabled: true
     hosts:
