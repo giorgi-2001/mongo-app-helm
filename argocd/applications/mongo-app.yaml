@@ -16,5 +16,8 @@ spec:
     server: https://kubernetes.default.svc
     namespace: mongo
   syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true
