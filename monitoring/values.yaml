@@ -60,7 +60,7 @@ kube-prometheus-stack:
     ingress:
       enabled: true
       annotations:
-        traefik.ingress.kubernetes.io/ssl-redirect: true
+        traefik.ingress.kubernetes.io/ssl-redirect: "true"
       ingressClassName: traefik
       hosts:
         - monitoring.localhost
