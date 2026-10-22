@@ -16,7 +16,7 @@ mongo-app:
   image:
     pullPolicy: IfNotPresent
     repository: giorgi023/mongo-app
-    tag: e17c43a25e3012698c7a18989069b3df94603e53
+    tag: 042cdee0155aa81141a29850523f7dba7e8f5384
   livenessProbe: {}
   readinessProbe: {}
   replicaCount: 1
@@ -43,7 +43,7 @@ mongo-app-ui:
   image:
     pullPolicy: IfNotPresent
     repository: giorgi023/mongo-app-ui
-    tag: e17c43a25e3012698c7a18989069b3df94603e53
+    tag: 042cdee0155aa81141a29850523f7dba7e8f5384
   ingress:
     annotations: {}
     className: traefik
