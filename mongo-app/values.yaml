@@ -1,49 +1,61 @@
 mongo-app:
+  fullnameOverride: mongo-app
+  image:
+    pullPolicy: IfNotPresent
+    repository: giorgi023/mongo-app
+    tag: 4fdd2bd463d8d9d5cfbaeac9c499a93ed104b9be
+  service:
+    containerPort: 8000
+    port: 8000
+    type: ClusterIP
+
   env:
   - name: MONGO_URI
     valueFrom:
       secretKeyRef:
         key: mongo_uri
         name: mongo-app-secret
+  
   - name: DB_NAME
     valueFrom:
       secretKeyRef:
         key: database
         name: mongo-app-secret
+
   - name: OTEL_ENDPOINT
     value: http://otel-collector.monitoring.svc.cluster.local:4317
-  fullnameOverride: mongo-app
-  image:
-    pullPolicy: IfNotPresent
-    repository: giorgi023/mongo-app
-    tag: 4fdd2bd463d8d9d5cfbaeac9c499a93ed104b9be
+
+  - name: FRONTEND_HOSTNAME
+    value: https://localhost:443
+
+  - name: GOOGLE_CLIENT_ID
+    valueFrom:
+      secretKeyRef:
+        key: google-client-id
+        name: google-secret
+
+  - name: GOOGLE_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        key: google-client-secret
+        name: google-secret
+
   livenessProbe: {}
   readinessProbe: {}
   replicaCount: 1
   resources: {}
-  service:
-    containerPort: 8000
-    port: 8000
-    type: ClusterIP
+  
 mongo-app-ui:
-  env: []
   fullnameOverride: mongo-app-ui
-  httpRoute:
-    annotations: {}
-    enabled: false
-    hostnames: []
-    parentRefs:
-    - name: gateway
-      sectionName: http
-    rules:
-    - matches:
-      - path:
-          type: PathPrefix
-          value: /
   image:
     pullPolicy: IfNotPresent
     repository: giorgi023/mongo-app-ui
     tag: 4fdd2bd463d8d9d5cfbaeac9c499a93ed104b9be
+  service:
+    containerPort: 80
+    port: 80
+    type: ClusterIP
+  env: []
   ingress:
     annotations: {}
     className: traefik
@@ -62,6 +74,7 @@ mongo-app-ui:
     - hosts:
       - localhost
       secretName: mongo-ui-tls-secret
+
   livenessProbe:
     httpGet:
       path: /
@@ -72,18 +85,15 @@ mongo-app-ui:
       port: http
   replicaCount: 1
   resources: {}
-  service:
-    containerPort: 80
-    port: 80
-    type: ClusterIP
+
 mongodb:
+  enabled: true
   architecture: standalone
   auth:
     database: mydatabase
     enabled: true
     existingSecret: mongo-app-secret
     username: appuser
-  enabled: true
   persistence:
     enabled: true
     size: 8Gi
