@@ -51,6 +51,7 @@ mongo-app-ui:
   ingress:
     annotations:
       traefik.ingress.kubernetes.io/ssl-redirect: "true"
+      cert-manager.io/cluster-issuer: global-issuer
     className: traefik
     enabled: true
     hosts:
