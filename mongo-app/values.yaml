@@ -50,8 +50,8 @@ mongo-app-ui:
   env: []
   ingress:
     annotations:
-      traefik.ingress.kubernetes.io/router.middlewares: mongo-force-https@kubernetescrd
-      cert-manager.io/cluster-issuer: global-issuer
+      traefik.ingress.kubernetes.io/router.middlewares: mongo-force-https@traefik
+      cert-manager.io/cluster-issuer: "global-issuer"
     className: traefik
     enabled: true
     hosts:
