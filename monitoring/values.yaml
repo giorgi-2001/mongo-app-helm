@@ -60,7 +60,7 @@ kube-prometheus-stack:
     ingress:
       enabled: true
       annotations:
-        traefik.ingress.kubernetes.io/router.middlewares: mongo-force-https@traefik
+        traefik.ingress.kubernetes.io/router.middlewares: mongo-force-https@kubernetescrd
         cert-manager.io/cluster-issuer: "global-issuer"
       ingressClassName: traefik
       hosts:
