@@ -3,54 +3,46 @@ mongo-app:
   image:
     pullPolicy: IfNotPresent
     repository: giorgi023/mongo-app
-    tag: 4fdd2bd463d8d9d5cfbaeac9c499a93ed104b9be
+    tag: 042cdee0155aa81141a29850523f7dba7e8f5384
   service:
     containerPort: 8000
     port: 8000
     type: ClusterIP
-
   env:
   - name: MONGO_URI
     valueFrom:
       secretKeyRef:
         key: mongo_uri
         name: mongo-app-secret
-  
   - name: DB_NAME
     valueFrom:
       secretKeyRef:
         key: database
         name: mongo-app-secret
-
   - name: OTEL_ENDPOINT
     value: http://otel-collector.monitoring.svc.cluster.local:4317
-
   - name: FRONTEND_HOSTNAME
     value: https://localhost:443
-
   - name: GOOGLE_CLIENT_ID
     valueFrom:
       secretKeyRef:
         key: google-client-id
         name: google-secret
-
   - name: GOOGLE_CLIENT_SECRET
     valueFrom:
       secretKeyRef:
         key: google-client-secret
         name: google-secret
-
   livenessProbe: {}
   readinessProbe: {}
   replicaCount: 1
   resources: {}
-  
 mongo-app-ui:
   fullnameOverride: mongo-app-ui
   image:
     pullPolicy: IfNotPresent
     repository: giorgi023/mongo-app-ui
-    tag: 4fdd2bd463d8d9d5cfbaeac9c499a93ed104b9be
+    tag: 042cdee0155aa81141a29850523f7dba7e8f5384
   service:
     containerPort: 80
     port: 80
@@ -74,7 +66,6 @@ mongo-app-ui:
     - hosts:
       - localhost
       secretName: mongo-ui-tls-secret
-
   livenessProbe:
     httpGet:
       path: /
@@ -85,7 +76,6 @@ mongo-app-ui:
       port: http
   replicaCount: 1
   resources: {}
-
 mongodb:
   enabled: true
   architecture: standalone
